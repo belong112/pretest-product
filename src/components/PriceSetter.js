@@ -4,12 +4,7 @@ import { checkOveLapAndNotInclude, thousandSeparator } from "../tools/tools";
 import { styled } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
-import InputLabel from "@mui/material/InputLabel";
-import FormHelperText from "@mui/material/FormHelperText";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
+import Typography from "@mui/material/Typography";
 
 const ageList = [];
 for (let i = 0; i <= 20; i++) {
@@ -20,70 +15,126 @@ const PriceSetterBox = styled(Box)({
   borderBottom: "1px solid gray",
   width: "900px",
   margin: "20px",
-  padding: "18px",
+  padding: "10px",
 });
 
 const PriceSettingTitle = styled("p")({
-  fontSize: "20px",
+  fontSize: "18px",
+  color: "#444",
+});
+
+const ErrorMessage = styled("div")({
+  backgroundColor: "peachpuff",
+  color: "orangered",
+  padding: "5px 10px",
+  borderRadius: "5px",
+  textAlign: "left",
+  fontWeight: "bold",
+});
+
+const SingleInput = styled("div")({
+  width: "48%",
+  padding: "10px 0px",
+});
+
+const GreyBox = styled("div")({
+  color: "#666",
+  backgroundColor: "#eee",
+  padding: "12px",
+  border: "1px solid #ccc",
+  borderRadius: "3px",
+  fontSize: "12px",
+});
+
+const Feehint = styled(Typography)({
+  color: "grey",
+  textAlign: "right",
+});
+
+const InputType = styled(Typography)({
+  color: "grey",
+  textAlign: "left",
+});
+
+const AgeInput = styled("select")({
+  width: "50%",
+  border: "1px solid #ccc",
+  borderRadius: "3px",
+});
+
+const FeeInput = styled("input")({
+  width: "100%",
+  border: "1px solid #ccc",
+  borderRadius: "3px",
 });
 
 export default function PriceSetter() {
-  const [age, setAge] = useState([0, 0]);
-  const [fee, setFee] = useState(0);
-  const isError = false;
+  const [startAge, setStartAge] = useState(0);
+  const [endAge, setEndAge] = useState(20);
+  const [fee, setFee] = useState("");
+  const isAgeError = true;
+  const isFeeError = fee === "";
 
   const handleFeeChange = (e) => {
     setFee(thousandSeparator(e.target.value));
   };
 
-  const handleAgeChange = (e) => {};
+  const handleStartAgeChange = (e) => {
+    setStartAge(e.target.value);
+  };
+
+  const handleEndAgeChange = (e) => {
+    setEndAge(e.target.value);
+  };
 
   return (
     <PriceSetterBox>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <PriceSettingTitle>價格設定 - 1</PriceSettingTitle>
-        <Button variant="text" color="error" sx={{ fontSize: "20px" }}>
+        <PriceSettingTitle>價格設定 - id</PriceSettingTitle>
+        <Button variant="text" color="error" sx={{ fontSize: "18px" }}>
           移除
         </Button>
       </Box>
-      <div>
-        <FormControl sx={{ m: 1, minWidth: 120 }}>
-          <InputLabel id="demo-simple-select-error-label">年齡</InputLabel>
-          <Select
-            id="demo-simple-select-error"
-            value={age}
-            label="Age"
-            onChange={handleAgeChange}
-          >
-            {ageList.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </Select>
-          {isError && <FormHelperText>年齡區間有重複</FormHelperText>}
-        </FormControl>
-        <TextField
-          id="outlined-select-currency"
-          select
-          label="Select"
-          defaultValue={10}
-        >
-          {ageList.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </TextField>
-        <TextField
-          id="fee-input"
-          label="Outlined"
-          variant="outlined"
-          value={fee}
-          onChange={handleFeeChange}
-        />
-      </div>
-      <Box>輸入 0 表示免費</Box>
+      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        <SingleInput>
+          <InputType>年齡</InputType>
+          <Box sx={{ display: "flex" }}>
+            <AgeInput
+              defaultValue={startAge}
+              value={startAge}
+              onChange={handleStartAgeChange}
+            >
+              {ageList.map((item) => (
+                <option value={item.value}>{item.label}</option>
+              ))}
+            </AgeInput>
+            <GreyBox>~</GreyBox>
+            <AgeInput
+              defaultValue={endAge}
+              value={endAge}
+              onChange={handleEndAgeChange}
+            >
+              {ageList.map((item) => (
+                <option value={item.value}>{item.label}</option>
+              ))}
+            </AgeInput>
+          </Box>
+          {isAgeError && <ErrorMessage>年齡區間不可重疊</ErrorMessage>}
+        </SingleInput>
+        <SingleInput>
+          <InputType>入住費用（每人每晚）</InputType>
+          <Box sx={{ display: "flex" }}>
+            <GreyBox>TWD</GreyBox>
+            <FeeInput
+              placeholder="  請輸入費用"
+              type="text"
+              onChange={handleFeeChange}
+            />
+          </Box>
+          {isFeeError && <ErrorMessage>不可以為空白</ErrorMessage>}
+          <Feehint>輸入 0 表示免費</Feehint>
+        </SingleInput>
+      </Box>
     </PriceSetterBox>
   );
 }
