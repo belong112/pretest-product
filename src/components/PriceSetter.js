@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 
 const ageList = [];
 for (let i = 0; i <= 20; i++) {
-  ageList.push({ value: i });
+  ageList.push(i);
 }
 
 const PriceSetterBox = styled(Box)({
@@ -110,14 +110,18 @@ export default function PriceSetter(props) {
           <InputType>年齡</InputType>
           <Box sx={{ display: "flex" }}>
             <AgeInput value={startAge} onChange={handleStartAgeChange}>
-              {ageList.map((item) => (
-                <option value={item.value}>{item.value}</option>
+              {ageList.map((age) => (
+                <option disabled={props.selectedAge.includes(age)} value={age}>
+                  {age}
+                </option>
               ))}
             </AgeInput>
             <GreyBox>~</GreyBox>
             <AgeInput value={endAge} onChange={handleEndAgeChange}>
-              {ageList.map((item) => (
-                <option value={item.value}>{item.value}</option>
+              {ageList.map((age) => (
+                <option disabled={props.selectedAge.includes(age)} value={age}>
+                  {age}
+                </option>
               ))}
             </AgeInput>
           </Box>

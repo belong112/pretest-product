@@ -44,8 +44,8 @@ export function checkOveLapAndNotInclude(array) {
 export function checkIfOverlap(targetAge, overlap) {
   for (let i = 0; i < overlap.length; i++) {
     if (
-      (overlap[i][0] <= targetAge[0] && targetAge[0] <= overlap[i][1]) ||
-      (overlap[i][0] <= targetAge[1] && targetAge[1] <= overlap[i][1])
+      (targetAge[0] <= overlap[i][0] && overlap[i][0] <= targetAge[1]) ||
+      (targetAge[0] <= overlap[i][1] && overlap[i][1] <= targetAge[1])
     ) {
       return true;
     }

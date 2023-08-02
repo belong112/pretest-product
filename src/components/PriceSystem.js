@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { nanoid } from "nanoid";
-import { checkOveLapAndNotInclude, checkIfOverlap } from "../tools/tools";
+import { checkOveLapAndNotInclude } from "../tools/tools";
 
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
@@ -31,6 +31,10 @@ export default function PriceSystem() {
       fee: "",
     },
   ]);
+  const selectedAge = priceData.reduce(
+    (r, data) => r.push(data.ageInterval[0], data.ageInterval[1]) && r,
+    []
+  );
   const ageIntervalList = priceData.map((data) => data.ageInterval);
   const oveLapAndNotInclude = checkOveLapAndNotInclude(ageIntervalList);
   const isAddBtnDisable = oveLapAndNotInclude.notInclude.length === 0;
@@ -84,8 +88,8 @@ export default function PriceSystem() {
           id={data.id}
           ageInterval={data.ageInterval}
           fee={data.fee}
-          isAgeError={data.isAgeError}
           overlapAge={oveLapAndNotInclude.overlap}
+          selectedAge={selectedAge}
           deleteSetter={deleteSetter}
           changeFee={changeFee}
           changeAgeInterval={changeAgeInterval}
