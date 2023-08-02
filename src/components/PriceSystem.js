@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { checkOveLapAndNotInclude } from "../tools/tools";
+import { nanoid } from "nanoid";
+import { checkOveLapAndNotInclude, checkIfOverlap } from "../tools/tools";
 
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
@@ -10,16 +11,11 @@ const AddPriceButton = styled(Button)({
   alignSelf: "flex-start",
   color: "lightseagreen",
   padding: "30px 30px",
-
-  "&:disable": {
-    backgroundColor: "#cccccc",
-    color: "#666666",
-  },
 });
 
 const Container = styled("div")({
   padding: "20px",
-  maxWidth: "1000px",
+  width: "1000px",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
@@ -28,21 +24,74 @@ const Container = styled("div")({
 });
 
 export default function PriceSystem() {
-  const [priceData, setPriceData] = useState([1, 2]);
-  const test = [[0, 11], [5, 8], [17, 20], [7], [4, 20]];
-  const data = checkOveLapAndNotInclude(test);
-  const isBtnDisable = data.notInclude.length === 0;
+  const [priceData, setPriceData] = useState([
+    {
+      id: `setting-${nanoid()}`,
+      ageInterval: [0, 0],
+      fee: "",
+    },
+  ]);
+  const ageIntervalList = priceData.map((data) => data.ageInterval);
+  const oveLapAndNotInclude = checkOveLapAndNotInclude(ageIntervalList);
+  const isAddBtnDisable = oveLapAndNotInclude.notInclude.length === 0;
 
   function handleClick() {
-    setPriceData([...priceData, priceData.length + 1]);
+    setPriceData([
+      ...priceData,
+      {
+        id: `setting-${nanoid()}`,
+        ageInterval: [0, 0],
+        fee: "",
+      },
+    ]);
+  }
+
+  function deleteSetter(id) {
+    const remainingData = priceData.filter((data) => id !== data.id);
+    setPriceData(remainingData);
+  }
+
+  function changeFee(id, newFee) {
+    const newData = priceData.map((data) =>
+      id === data.id
+        ? {
+            ...data,
+            fee: newFee,
+          }
+        : data
+    );
+    setPriceData(newData);
+  }
+
+  function changeAgeInterval(id, newAgeInterval) {
+    const newData = priceData.map((data) =>
+      id === data.id
+        ? {
+            ...data,
+            ageInterval: newAgeInterval,
+          }
+        : data
+    );
+    setPriceData(newData);
   }
 
   return (
     <Container>
-      {priceData.map((x) => (
-        <PriceSetter />
+      {priceData.map((data, i) => (
+        <PriceSetter
+          key={data.id}
+          i={i}
+          id={data.id}
+          ageInterval={data.ageInterval}
+          fee={data.fee}
+          isAgeError={data.isAgeError}
+          overlapAge={oveLapAndNotInclude.overlap}
+          deleteSetter={deleteSetter}
+          changeFee={changeFee}
+          changeAgeInterval={changeAgeInterval}
+        />
       ))}
-      <AddPriceButton disable={isBtnDisable} onClick={handleClick}>
+      <AddPriceButton disabled={isAddBtnDisable} onClick={handleClick}>
         + 新增價格設定
       </AddPriceButton>
     </Container>

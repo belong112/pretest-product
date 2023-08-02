@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { checkOveLapAndNotInclude, thousandSeparator } from "../tools/tools";
+import { checkIfOverlap, thousandSeparator } from "../tools/tools";
 
 import { styled } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 
 const ageList = [];
 for (let i = 0; i <= 20; i++) {
-  ageList.push({ value: i, label: i.toString() });
+  ageList.push({ value: i });
 }
 
 const PriceSetterBox = styled(Box)({
@@ -68,30 +68,40 @@ const FeeInput = styled("input")({
   borderRadius: "3px",
 });
 
-export default function PriceSetter() {
-  const [startAge, setStartAge] = useState(0);
-  const [endAge, setEndAge] = useState(20);
-  const [fee, setFee] = useState("");
-  const isAgeError = true;
+export default function PriceSetter(props) {
+  const [startAge, setStartAge] = useState(props.ageInterval[0]);
+  const [endAge, setEndAge] = useState(props.ageInterval[1]);
+  const [fee, setFee] = useState(props.fee);
+  const isAgeError = checkIfOverlap(props.ageInterval, props.overlapAge);
   const isFeeError = fee === "";
 
   const handleFeeChange = (e) => {
     setFee(thousandSeparator(e.target.value));
+    props.changeFee(props.id, e.target.value);
   };
 
   const handleStartAgeChange = (e) => {
-    setStartAge(e.target.value);
+    const newage = parseInt(e.target.value);
+    setStartAge(newage);
+    props.changeAgeInterval(props.id, [parseInt(newage), endAge]);
   };
 
   const handleEndAgeChange = (e) => {
-    setEndAge(e.target.value);
+    const newage = parseInt(e.target.value);
+    setEndAge(newage);
+    props.changeAgeInterval(props.id, [startAge, parseInt(newage)]);
   };
 
   return (
     <PriceSetterBox>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <PriceSettingTitle>價格設定 - id</PriceSettingTitle>
-        <Button variant="text" color="error" sx={{ fontSize: "18px" }}>
+        <PriceSettingTitle>價格設定 - {props.i + 1}</PriceSettingTitle>
+        <Button
+          variant="text"
+          color="error"
+          sx={{ fontSize: "18px" }}
+          onClick={() => props.deleteSetter(props.id)}
+        >
           移除
         </Button>
       </Box>
@@ -99,23 +109,15 @@ export default function PriceSetter() {
         <SingleInput>
           <InputType>年齡</InputType>
           <Box sx={{ display: "flex" }}>
-            <AgeInput
-              defaultValue={startAge}
-              value={startAge}
-              onChange={handleStartAgeChange}
-            >
+            <AgeInput value={startAge} onChange={handleStartAgeChange}>
               {ageList.map((item) => (
-                <option value={item.value}>{item.label}</option>
+                <option value={item.value}>{item.value}</option>
               ))}
             </AgeInput>
             <GreyBox>~</GreyBox>
-            <AgeInput
-              defaultValue={endAge}
-              value={endAge}
-              onChange={handleEndAgeChange}
-            >
+            <AgeInput value={endAge} onChange={handleEndAgeChange}>
               {ageList.map((item) => (
-                <option value={item.value}>{item.label}</option>
+                <option value={item.value}>{item.value}</option>
               ))}
             </AgeInput>
           </Box>
@@ -126,8 +128,9 @@ export default function PriceSetter() {
           <Box sx={{ display: "flex" }}>
             <GreyBox>TWD</GreyBox>
             <FeeInput
-              placeholder="  請輸入費用"
+              placeholder="請輸入費用"
               type="text"
+              value={fee}
               onChange={handleFeeChange}
             />
           </Box>

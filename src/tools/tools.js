@@ -41,6 +41,18 @@ export function checkOveLapAndNotInclude(array) {
   return { overlap: overlapList, notInclude: notIncludeList };
 }
 
+export function checkIfOverlap(targetAge, overlap) {
+  for (let i = 0; i < overlap.length; i++) {
+    if (
+      (overlap[i][0] <= targetAge[0] && targetAge[0] <= overlap[i][1]) ||
+      (overlap[i][0] <= targetAge[1] && targetAge[1] <= overlap[i][1])
+    ) {
+      return true;
+    }
+  }
+  return false;
+}
+
 export function thousandSeparator(num) {
   const addCommas = (num) =>
     num.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","); //加上千分位
