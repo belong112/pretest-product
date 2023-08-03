@@ -12,10 +12,10 @@ for (let i = 0; i <= 20; i++) {
 }
 
 const PriceSetterBox = styled(Box)({
-  borderBottom: "1px solid gray",
   width: "900px",
   margin: "20px",
   padding: "10px",
+  borderBottom: "1px solid gray",
 });
 
 const PriceSettingTitle = styled("p")({
@@ -24,12 +24,12 @@ const PriceSettingTitle = styled("p")({
 });
 
 const ErrorMessage = styled("div")({
+  fontWeight: "bold",
   backgroundColor: "peachpuff",
   color: "orangered",
   padding: "5px 10px",
   borderRadius: "5px",
   textAlign: "left",
-  fontWeight: "bold",
 });
 
 const SingleInput = styled("div")({
@@ -38,12 +38,12 @@ const SingleInput = styled("div")({
 });
 
 const GreyBox = styled("div")({
+  fontSize: "12px",
   color: "#666",
   backgroundColor: "#eee",
   padding: "12px",
   border: "1px solid #ccc",
   borderRadius: "3px",
-  fontSize: "12px",
 });
 
 const Feehint = styled(Typography)({
@@ -68,7 +68,7 @@ const FeeInput = styled("input")({
   borderRadius: "3px",
 });
 
-export default function PriceSetter(props) {
+export default function PriceSetting(props) {
   const [startAge, setStartAge] = useState(props.ageInterval[0]);
   const [endAge, setEndAge] = useState(props.ageInterval[1]);
   const [fee, setFee] = useState(props.fee);
@@ -100,7 +100,7 @@ export default function PriceSetter(props) {
           variant="text"
           color="error"
           sx={{ fontSize: "18px" }}
-          onClick={() => props.deleteSetter(props.id)}
+          onClick={() => props.deleteSetting(props.id)}
         >
           移除
         </Button>

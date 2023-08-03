@@ -21,7 +21,7 @@ export function checkOveLapAndNotInclude(array) {
       if (start !== -1) {
         if (currtype === "notInclude") {
           notIncludeList.push([start, i - 1]);
-        } else if (currtype === "OverLap") {
+        } else if (currtype === "overLap") {
           overlapList.push([start, i - 1]);
         }
       }
@@ -33,7 +33,7 @@ export function checkOveLapAndNotInclude(array) {
   if (start !== -1) {
     if (currtype === "notInclude") {
       notIncludeList.push([start, 20]);
-    } else if (currtype === "OverLap") {
+    } else if (currtype === "overLap") {
       overlapList.push([start, 20]);
     }
   }
@@ -64,8 +64,8 @@ function type(num) {
   if (num === 0) {
     return "notInclude";
   } else if (num === 1) {
-    return "ExactOne";
+    return "exactOne";
   } else {
-    return "OverLap";
+    return "overLap";
   }
 }

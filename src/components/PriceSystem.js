@@ -4,23 +4,23 @@ import { checkOveLapAndNotInclude } from "../tools/tools";
 
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
-import PriceSetter from "./PriceSetter";
+import PriceSetting from "./PriceSetting";
 
 const AddPriceButton = styled(Button)({
   fontSize: "18px",
-  alignSelf: "flex-start",
   color: "lightseagreen",
   padding: "30px 30px",
+  alignSelf: "flex-start",
 });
 
 const Container = styled("div")({
-  padding: "20px",
   width: "1000px",
+  padding: "20px",
+  border: "1px dashed grey",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
   flexDirection: "column",
-  border: "1px dashed grey",
 });
 
 export default function PriceSystem() {
@@ -50,7 +50,7 @@ export default function PriceSystem() {
     ]);
   }
 
-  function deleteSetter(id) {
+  function deleteSetting(id) {
     const remainingData = priceData.filter((data) => id !== data.id);
     setPriceData(remainingData);
   }
@@ -82,15 +82,15 @@ export default function PriceSystem() {
   return (
     <Container>
       {priceData.map((data, i) => (
-        <PriceSetter
+        <PriceSetting
           key={data.id}
-          i={i}
           id={data.id}
+          i={i}
           ageInterval={data.ageInterval}
           fee={data.fee}
           overlapAge={oveLapAndNotInclude.overlap}
           selectedAge={selectedAge}
-          deleteSetter={deleteSetter}
+          deleteSetting={deleteSetting}
           changeFee={changeFee}
           changeAgeInterval={changeAgeInterval}
         />
